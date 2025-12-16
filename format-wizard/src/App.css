@@ -1,0 +1,23 @@
+html,
+body {
+  background: #090979;
+  background-repeat: no-repeat;
+  background-attachment: fixed; /* keeps it steady even if page scrolls */
+  background-size: cover;
+}
+
+.title-wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 5px;
+}
+
+.title-text{
+  font-family: "Oleo Script", system-ui;
+  font-weight: 400;
+  font-style: normal;
+  padding: 0px;
+  margin: 0px;
+  color: wheat;
+}
