@@ -1,7 +1,12 @@
-import { BEAUTIFY, CBOR, CSV, HJSON, JSON5, MSGPACK, XML, YAML } from "../data/operation-constants";
+import {
+  BEAUTIFY,
+  HJSON,
+  JSON5,
+  XML,
+  YAML,
+} from "../data/operation-constants";
 
-export default function Toolbar({operation, selectOperation}) {
-
+export default function Toolbar({ operation, selectOperation }) {
   return (
     <div className="toolbar">
       <div className="format-group">
@@ -44,39 +49,12 @@ export default function Toolbar({operation, selectOperation}) {
 
         <input
           type="radio"
-          id="csv"
-          name="format"
-          checked={operation === CSV}
-          onChange={() => selectOperation(CSV)}
-        />
-        <label htmlFor="csv">CSV</label>
-
-        <input
-          type="radio"
           id="hjson"
           name="format"
           checked={operation === HJSON}
           onChange={() => selectOperation(HJSON)}
         />
         <label htmlFor="hjson">HJSON</label>
-
-        <input
-          type="radio"
-          id="msgpack"
-          name="format"
-          checked={operation === MSGPACK}
-          onChange={() => selectOperation(MSGPACK)}
-        />
-        <label htmlFor="msgpack">MessagePack</label>
-
-        <input
-          type="radio"
-          id="cbor"
-          name="format"
-          checked={operation === CBOR}
-          onChange={() => selectOperation(CBOR)}
-        />
-        <label htmlFor="cbor">CBOR</label>
       </div>
     </div>
   );
