@@ -1,7 +1,6 @@
-import { useState } from "react";
+import { BEAUTIFY, CBOR, CSV, HJSON, JSON5, MSGPACK, XML, YAML } from "../data/operation-constants";
 
-export default function Toolbar() {
-  const [checkedOption, updateCheckedOption] = useState("");
+export default function Toolbar({operation, selectOperation}) {
 
   return (
     <div className="toolbar">
@@ -10,8 +9,8 @@ export default function Toolbar() {
           type="radio"
           id="beautify"
           name="format"
-          checked={checkedOption === "beautify"}
-          onChange={() => updateCheckedOption("beautify")}
+          checked={operation === BEAUTIFY}
+          onChange={() => selectOperation(BEAUTIFY)}
         />
         <label htmlFor="beautify">Beautify</label>
       </div>
@@ -20,8 +19,8 @@ export default function Toolbar() {
           type="radio"
           id="yaml"
           name="format"
-          checked={checkedOption === "yaml"}
-          onChange={() => updateCheckedOption("yaml")}
+          checked={operation === YAML}
+          onChange={() => selectOperation(YAML)}
         />
         <label htmlFor="yaml">YAML</label>
 
@@ -29,8 +28,8 @@ export default function Toolbar() {
           type="radio"
           id="xml"
           name="format"
-          checked={checkedOption === "xml"}
-          onChange={() => updateCheckedOption("xml")}
+          checked={operation === XML}
+          onChange={() => selectOperation(XML)}
         />
         <label htmlFor="xml">XML</label>
 
@@ -38,8 +37,8 @@ export default function Toolbar() {
           type="radio"
           id="json5"
           name="format"
-          checked={checkedOption === "json5"}
-          onChange={() => updateCheckedOption("json5")}
+          checked={operation === JSON5}
+          onChange={() => selectOperation(JSON5)}
         />
         <label htmlFor="json5">JSON5</label>
 
@@ -47,8 +46,8 @@ export default function Toolbar() {
           type="radio"
           id="csv"
           name="format"
-          checked={checkedOption === "csv"}
-          onChange={() => updateCheckedOption("csv")}
+          checked={operation === CSV}
+          onChange={() => selectOperation(CSV)}
         />
         <label htmlFor="csv">CSV</label>
 
@@ -56,8 +55,8 @@ export default function Toolbar() {
           type="radio"
           id="hjson"
           name="format"
-          checked={checkedOption === "hjson"}
-          onChange={() => updateCheckedOption("hjson")}
+          checked={operation === HJSON}
+          onChange={() => selectOperation(HJSON)}
         />
         <label htmlFor="hjson">HJSON</label>
 
@@ -65,8 +64,8 @@ export default function Toolbar() {
           type="radio"
           id="msgpack"
           name="format"
-          checked={checkedOption === "msgpack"}
-          onChange={() => updateCheckedOption("msgpack")}
+          checked={operation === MSGPACK}
+          onChange={() => selectOperation(MSGPACK)}
         />
         <label htmlFor="msgpack">MessagePack</label>
 
@@ -74,8 +73,8 @@ export default function Toolbar() {
           type="radio"
           id="cbor"
           name="format"
-          checked={checkedOption === "cbor"}
-          onChange={() => updateCheckedOption("cbor")}
+          checked={operation === CBOR}
+          onChange={() => selectOperation(CBOR)}
         />
         <label htmlFor="cbor">CBOR</label>
       </div>
