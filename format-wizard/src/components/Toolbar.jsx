@@ -2,6 +2,7 @@ import {
   BEAUTIFY,
   HJSON,
   JSON5,
+  TOML,
   XML,
   YAML,
 } from "../data/operation-constants";
@@ -55,6 +56,15 @@ export default function Toolbar({ operation, selectOperation }) {
           onChange={() => selectOperation(HJSON)}
         />
         <label htmlFor="hjson">HJSON</label>
+
+        <input
+          type="radio"
+          id="toml"
+          name="format"
+          checked={operation === TOML}
+          onChange={() => selectOperation(TOML)}
+        />
+        <label htmlFor="toml">TOML</label>
       </div>
     </div>
   );

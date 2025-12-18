@@ -2,9 +2,11 @@ import CodeMirror from "@uiw/react-codemirror";
 import { json } from "@codemirror/lang-json";
 import { yaml } from "@codemirror/lang-yaml";
 import { xml } from "@codemirror/lang-xml";
+import { toml } from "@codemirror/legacy-modes/mode/toml";
+import { StreamLanguage } from "@codemirror/language";
 import { foldGutter } from "@codemirror/language";
 import { oneDark } from "@codemirror/theme-one-dark";
-import { XML, YAML } from "../data/operation-constants";
+import { TOML, XML, YAML } from "../data/operation-constants";
 
 export default function Result({value, format}) {
     let extensionValue = json();
@@ -14,6 +16,9 @@ export default function Result({value, format}) {
         break;
       case XML:
         extensionValue = xml();
+        break;
+      case TOML:
+        extensionValue = StreamLanguage.define(toml);
         break;
       default: json();
     }
