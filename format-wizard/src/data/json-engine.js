@@ -13,6 +13,8 @@ import {
 } from "./operation-constants";
 import json2toml from "json2toml";
 
+const NODE_Y_SPACING = 60
+const ARRAY_ITEM_SPACING = 45
 export function isValidJSON(json) {
   try {
     JSON.parse(json);
@@ -98,3 +100,86 @@ function toToml(json) {
     newlineAfterSection: true,
   });
 }
+
+export function toGraph(obj, parentId = "root", nodes = [], edges = [], depth = 0) {
+  const primitives = [];
+  const nestedEntries = [];
+
+  Object.entries(obj).forEach(([key, value]) => {
+    if (value !== null && typeof value === "object") {
+      nestedEntries.push([key, value]);
+    } else {
+      primitives.push(`${key}: ${value}`);
+    }
+  });
+
+  // 1️⃣ Create node for current object
+  nodes.push({
+    id: parentId,
+    data: {
+      label: primitives.join("\n") || "(object)",
+    },
+    position: {
+      x: depth * 300,
+      y: nodes.length * 120,
+    },
+  });
+
+  // 2️⃣ Handle nested objects & arrays
+  nestedEntries.forEach(([key, value], index) => {
+    const containerId = `${parentId}-${key}-${index}`;
+
+    // Edge from parent → container
+    edges.push({
+      id: `e-${parentId}-${containerId}`,
+      source: parentId,
+      target: containerId,
+    });
+
+    // 📦 ARRAY
+    if (Array.isArray(value)) {
+      // Array name node
+      nodes.push({
+        id: containerId,
+        data: { label: `${key} [${value.length}]` },
+        position: {
+          x: (depth + 1) * 300,
+          y: nodes.length * 120,
+        },
+      });
+
+      value.forEach((item, i) => {
+        const itemId = `${containerId}-item-${i}`;
+
+        edges.push({
+          id: `e-${containerId}-${itemId}`,
+          source: containerId,
+          target: itemId,
+        });
+
+        if (item !== null && typeof item === "object") {
+          // Recurse for object items
+          toGraph(item, itemId, nodes, edges, depth + 2);
+        } else {
+          // Primitive array item node
+          nodes.push({
+            id: itemId,
+            data: { label: String(item) },
+            position: {
+              x: (depth + 2) * 300,
+              y: nodes.length * 120,
+            },
+          });
+        }
+      });
+    }
+
+    else {
+      toGraph(value, containerId, nodes, edges, depth + 1);
+    }
+  });
+
+  return { nodes, edges };
+}
+
+

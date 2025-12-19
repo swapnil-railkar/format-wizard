@@ -23,6 +23,7 @@
     "json5": "^2.2.3",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
+    "reactflow": "^11.11.4",
     "xml-js": "^1.6.11"
   },
   "devDependencies": {

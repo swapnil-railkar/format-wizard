@@ -62,14 +62,14 @@ body {
 
 .editor-wrapper {
   display: grid;
-  grid-template-columns: 1fr 1fr; 
-  grid-template-rows: 1fr;  
-  gap: 24px;           
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr;
+  gap: 24px;
   padding: 16px;
 }
 
 .editor-wrapper > * {
-  min-width: 0;   /* VERY IMPORTANT for CodeMirror */
+  min-width: 0; /* VERY IMPORTANT for CodeMirror */
   min-height: 0;
 }
 
@@ -101,4 +101,42 @@ body {
   scrollbar-color: #475569 #0f172a;
 }
 
+.tree-view {
+  width: 100%;
+  height: 80vh; 
+  background-color: #545454b0;
+  border-radius: 10px;
+}
+
+.tree-view .react-flow__node-default {
+  background-color: #000b3d;
+  color: #e5e7eb;
+  border-radius: 10px;
+  padding: 10px 14px;
+  white-space: pre-wrap;
+  font-family: "Poppins", sans-serif;
+  text-align: left;
+}
+
+.tree-view .react-flow__node-default:hover {
+  box-shadow: 0 0 10px rgba(250, 204, 21, 0.6);
+  border: 1px solid #facc15;
+}
+
+.tree-view .react-flow__node.selected
+.react-flow__node-default__body {
+  box-shadow: 0 0 0 2px #facc15;
+}
+
+.tree-view .react-flow__edge-path {
+  stroke: #54a0ff;
+  stroke-width: 2;
+}
+
+.tree-view .react-flow__handle {
+  background-color: #facc15;
+  border: 2px solid #1f2937;
+  width: 8px;
+  height: 8px;
+}
 
