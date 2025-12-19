@@ -113,7 +113,7 @@ export function toGraph(obj, parentId = "root", nodes = [], edges = [], depth = 
     }
   });
 
-  // 1️⃣ Create node for current object
+  // 1️⃣ Create node for current object's DATA
   nodes.push({
     id: parentId,
     data: {
@@ -129,7 +129,7 @@ export function toGraph(obj, parentId = "root", nodes = [], edges = [], depth = 
   nestedEntries.forEach(([key, value], index) => {
     const containerId = `${parentId}-${key}-${index}`;
 
-    // Edge from parent → container
+    // Edge from parent data → container (key node)
     edges.push({
       id: `e-${parentId}-${containerId}`,
       source: parentId,
@@ -138,7 +138,7 @@ export function toGraph(obj, parentId = "root", nodes = [], edges = [], depth = 
 
     // 📦 ARRAY
     if (Array.isArray(value)) {
-      // Array name node
+      // Array key node
       nodes.push({
         id: containerId,
         data: { label: `${key} [${value.length}]` },
@@ -158,10 +158,8 @@ export function toGraph(obj, parentId = "root", nodes = [], edges = [], depth = 
         });
 
         if (item !== null && typeof item === "object") {
-          // Recurse for object items
           toGraph(item, itemId, nodes, edges, depth + 2);
         } else {
-          // Primitive array item node
           nodes.push({
             id: itemId,
             data: { label: String(item) },
@@ -174,12 +172,34 @@ export function toGraph(obj, parentId = "root", nodes = [], edges = [], depth = 
       });
     }
 
+    // 🧱 OBJECT  ✅ FIXED PART
     else {
-      toGraph(value, containerId, nodes, edges, depth + 1);
+      // Object key node (e.g. "education")
+      nodes.push({
+        id: containerId,
+        data: { label: key },
+        position: {
+          x: (depth + 1) * 300,
+          y: nodes.length * 120,
+        },
+      });
+
+      const dataNodeId = `${containerId}-data`;
+
+      // Edge: key node → data node
+      edges.push({
+        id: `e-${containerId}-${dataNodeId}`,
+        source: containerId,
+        target: dataNodeId,
+      });
+
+      // Recurse into object data
+      toGraph(value, dataNodeId, nodes, edges, depth + 2);
     }
   });
 
   return { nodes, edges };
 }
+
 
 
