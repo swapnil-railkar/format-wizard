@@ -7,7 +7,7 @@ import { convertJSON, isValidJSON } from "./data/json-engine";
 import {
   DFEFAULT_INPUT,
   DEFAULT_OUTPUT,
-  TOGGLE_VIEW,
+  TREE_VIEW,
 } from "./data/operation-constants";
 import TreeView from "./components/TreeView";
 
@@ -15,15 +15,11 @@ function App() {
   const [input, updateInput] = useState(DFEFAULT_INPUT);
   const [output, updateOutput] = useState();
   const [operation, updateOperation] = useState(DEFAULT_OUTPUT);
-  const [showTreeView, updateShowTreeView] = useState(false);
 
   useEffect(() => {
     console.log(operation);
     function handleUpdateOutput(msg) {
       updateOutput(msg);
-    }
-    function handleToggle() {
-      updateShowTreeView((prevState) => !prevState);
     }
     const result = isValidJSON(input.trim());
     console.log(result);
@@ -33,8 +29,7 @@ function App() {
     }
     // input json is valid.
     console.log(operation);
-    if (operation === TOGGLE_VIEW) {
-      handleToggle();
+    if(operation === TREE_VIEW) {
       return;
     }
     const outputMsg = convertJSON(operation, input);
@@ -47,15 +42,14 @@ function App() {
       <Toolbar
         operation={operation}
         selectOperation={updateOperation}
-        treeView={showTreeView}
       />
-      {!showTreeView && (
+      {operation != TREE_VIEW && (
         <main className="editor-wrapper">
           <Editor defaultValue={input} handleUpdateInput={updateInput} />
           <Result value={output} format={operation} />
         </main>
       )}
-      {showTreeView && <TreeView jsonStr={input}/>}
+      {operation === TREE_VIEW && <TreeView jsonStr={input}/>}
     </>
   );
 }

@@ -5,5 +5,7 @@ export const JSON5 = 'json5';
 export const HJSON = 'hjson';
 export const TOML = 'toml';
 export const TOGGLE_VIEW = 'toggle-view';
+export const TREE_VIEW = 'tree-view';
+export const JSON_VIEW = 'json-view';
 export const DFEFAULT_INPUT = "Paste or type JSON.";
 export const DEFAULT_OUTPUT = "Nothing to show.";

@@ -2,24 +2,34 @@ import {
   BEAUTIFY,
   HJSON,
   JSON5,
-  TOGGLE_VIEW,
+  JSON_VIEW,
   TOML,
+  TREE_VIEW,
   XML,
   YAML,
 } from "../data/operation-constants";
 
-export default function Toolbar({ operation, selectOperation, treeView }) {
+export default function Toolbar({ operation, selectOperation }) {
   return (
     <div className="toolbar">
       <div className="format-group">
         <input
           type="radio"
-          id="toggle-view"
+          id="json-view"
           name="format"
-          checked={operation === TOGGLE_VIEW}
-          onChange={() => selectOperation(TOGGLE_VIEW)}
+          checked={operation === JSON_VIEW}
+          onChange={() => selectOperation(JSON_VIEW)}
         />
-        <label htmlFor="toggle-view">{treeView ? 'JSON View' : 'Tree View'}</label>
+        <label htmlFor="json-view">JSON View</label>
+
+        <input
+          type="radio"
+          id="tree-view"
+          name="format"
+          checked={operation === TREE_VIEW}
+          onChange={() => selectOperation(TREE_VIEW)}
+        />
+        <label htmlFor="tree-view">Tree View</label>
 
         <input
           type="radio"
