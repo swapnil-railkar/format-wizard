@@ -12,10 +12,8 @@ import {
   DEFAULT_OUTPUT,
 } from "./operation-constants";
 import json2toml from "json2toml";
-import { Position } from "reactflow";
+import { Position } from "@xyflow/react";
 
-const NODE_Y_SPACING = 60;
-const ARRAY_ITEM_SPACING = 45;
 export function isValidJSON(json) {
   try {
     JSON.parse(json);
@@ -102,13 +100,7 @@ function toToml(json) {
   });
 }
 
-export function toGraph(
-  obj,
-  parentId = "root",
-  nodes = [],
-  edges = [],
-  depth = 0
-) {
+export function toGraph(obj, parentId = "root", nodes = [], edges = []) {
   const primitives = [];
   const nestedEntries = [];
 
@@ -120,64 +112,73 @@ export function toGraph(
     }
   });
 
-  // 1️⃣ Create node for current object's DATA
-  nodes.push({
-    id: parentId,
-    data: {
-      label: primitives.join("\n") || "(object)",
-    },
-    position: {
-      x: depth * 300,
-      y: nodes.length * 120,
-    },
-    sourcePosition: Position.Right,
-    targetPosition: Position.Left,
-  });
+  // 1️⃣ Parent key node (always exists)
+  if (!nodes.find((n) => n.id === parentId)) {
+    nodes.push({
+      id: parentId,
+      data: {
+        label: parentId === "root" ? "root" : parentId.split("-").pop(),
+      },
+      sourcePosition: Position.Right,
+      targetPosition: Position.Left,
+    });
+  }
 
-  // 2️⃣ Handle nested objects & arrays
-  nestedEntries.forEach(([key, value], index) => {
-    const containerId = `${parentId}-${key}-${index}`;
+  // 2️⃣ Data node (primitives only)
+  if (primitives.length > 0) {
+    const dataId = `${parentId}__data`;
 
-    // Edge from parent data → container (key node)
-    edges.push({
-      id: `e-${parentId}-${containerId}`,
-      source: parentId,
-      target: containerId,
+    nodes.push({
+      id: dataId,
+      data: { label: primitives.join("\n") },
+      sourcePosition: Position.Right,
+      targetPosition: Position.Left,
     });
 
-    // 📦 ARRAY
-    if (Array.isArray(value)) {
-      // Array key node
-      nodes.push({
-        id: containerId,
-        data: { label: `${key} [${value.length}]` },
-        position: {
-          x: (depth + 1) * 300,
-          y: nodes.length * 120,
-        },
-        sourcePosition: Position.Right,
-        targetPosition: Position.Left,
-      });
+    edges.push({
+      id: `e-${parentId}-${dataId}`,
+      source: parentId,
+      target: dataId,
+    });
+  }
 
+  // 3️⃣ Nested keys (objects & arrays)
+  nestedEntries.forEach(([key, value], index) => {
+    const keyNodeId = `${parentId}-${key}-${index}`;
+
+    // Key node (object or array)
+    nodes.push({
+      id: keyNodeId,
+      data: {
+        label: Array.isArray(value) ? `${key} [${value.length}]` : key,
+      },
+      sourcePosition: Position.Right,
+      targetPosition: Position.Left,
+    });
+
+    edges.push({
+      id: `e-${parentId}-${keyNodeId}`,
+      source: parentId,
+      target: keyNodeId,
+    });
+
+    // 📦 ARRAY — items are ALWAYS children of the array key
+    if (Array.isArray(value)) {
       value.forEach((item, i) => {
-        const itemId = `${containerId}-item-${i}`;
+        const itemId = `${keyNodeId}-item-${i}`;
 
         edges.push({
-          id: `e-${containerId}-${itemId}`,
-          source: containerId,
+          id: `e-${keyNodeId}-${itemId}`,
+          source: keyNodeId,
           target: itemId,
         });
 
         if (item !== null && typeof item === "object") {
-          toGraph(item, itemId, nodes, edges, depth + 2);
+          toGraph(item, itemId, nodes, edges);
         } else {
           nodes.push({
             id: itemId,
             data: { label: String(item) },
-            position: {
-              x: (depth + 2) * 300,
-              y: nodes.length * 120,
-            },
             sourcePosition: Position.Right,
             targetPosition: Position.Left,
           });
@@ -185,31 +186,9 @@ export function toGraph(
       });
     }
 
-    // 🧱 OBJECT  ✅ FIXED PART
+    // 🧱 OBJECT
     else {
-      // Object key node (e.g. "education")
-      nodes.push({
-        id: containerId,
-        data: { label: key },
-        position: {
-          x: (depth + 1) * 300,
-          y: nodes.length * 120,
-        },
-        sourcePosition: Position.Right,
-        targetPosition: Position.Left,
-      });
-
-      const dataNodeId = `${containerId}-data`;
-
-      // Edge: key node → data node
-      edges.push({
-        id: `e-${containerId}-${dataNodeId}`,
-        source: containerId,
-        target: dataNodeId,
-      });
-
-      // Recurse into object data
-      toGraph(value, dataNodeId, nodes, edges, depth + 2);
+      toGraph(value, keyNodeId, nodes, edges);
     }
   });
 
