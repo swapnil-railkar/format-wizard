@@ -3,7 +3,7 @@ import "./App.css";
 import Editor from "./components/Editor";
 import Result from "./components/Result";
 import Toolbar from "./components/Toolbar";
-import { convertJSON, isValidJSON } from "./data/json-engine";
+import { convertJSON, isValidJSON } from "./data/json-engine.jsx";
 import {
   DFEFAULT_INPUT,
   DEFAULT_OUTPUT,

@@ -3,7 +3,7 @@ import { ReactFlow } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import dagre from "dagre";
 
-import { toGraph } from "../data/json-engine";
+import { toGraph } from "../data/json-engine.jsx";
 import "../App.css";
 
 const NODE_WIDTH = 200;

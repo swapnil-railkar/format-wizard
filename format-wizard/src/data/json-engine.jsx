@@ -108,7 +108,13 @@ export function toGraph(obj, parentId = "root", nodes = [], edges = []) {
     if (value !== null && typeof value === "object") {
       nestedEntries.push([key, value]);
     } else {
-      primitives.push(`${key}: ${value}`);
+      primitives.push(
+        <div key={key} className="kv-line">
+          <span className="json-key">{key}</span>
+          <span className="json-sep">: </span>
+          <span className="json-value">{String(value)}</span>
+        </div>
+      );
     }
   });
 
@@ -117,7 +123,10 @@ export function toGraph(obj, parentId = "root", nodes = [], edges = []) {
     nodes.push({
       id: parentId,
       data: {
-        label: parentId === "root" ? "root" : parentId.split("-").pop(),
+        label:
+          parentId === "root"
+            ? <span className="json-root">root</span>
+            : <span className="json-key">{parentId.split("-").pop()}</span>,
       },
       sourcePosition: Position.Right,
       targetPosition: Position.Left,
@@ -130,7 +139,9 @@ export function toGraph(obj, parentId = "root", nodes = [], edges = []) {
 
     nodes.push({
       id: dataId,
-      data: { label: primitives.join("\n") },
+      data: {
+        label: <div className="data-node">{primitives}</div>,
+      },
       sourcePosition: Position.Right,
       targetPosition: Position.Left,
     });
@@ -146,11 +157,14 @@ export function toGraph(obj, parentId = "root", nodes = [], edges = []) {
   nestedEntries.forEach(([key, value], index) => {
     const keyNodeId = `${parentId}-${key}-${index}`;
 
-    // Key node (object or array)
     nodes.push({
       id: keyNodeId,
       data: {
-        label: Array.isArray(value) ? `${key} [${value.length}]` : key,
+        label: (
+          <span className="json-key">
+            {Array.isArray(value) ? `${key} [${value.length}]` : key}
+          </span>
+        ),
       },
       sourcePosition: Position.Right,
       targetPosition: Position.Left,
@@ -178,7 +192,9 @@ export function toGraph(obj, parentId = "root", nodes = [], edges = []) {
         } else {
           nodes.push({
             id: itemId,
-            data: { label: String(item) },
+            data: {
+              label: <span className="json-value">{String(item)}</span>,
+            },
             sourcePosition: Position.Right,
             targetPosition: Position.Left,
           });
@@ -194,3 +210,4 @@ export function toGraph(obj, parentId = "root", nodes = [], edges = []) {
 
   return { nodes, edges };
 }
+
