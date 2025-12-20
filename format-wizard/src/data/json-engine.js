@@ -12,9 +12,10 @@ import {
   DEFAULT_OUTPUT,
 } from "./operation-constants";
 import json2toml from "json2toml";
+import { Position } from "reactflow";
 
-const NODE_Y_SPACING = 60
-const ARRAY_ITEM_SPACING = 45
+const NODE_Y_SPACING = 60;
+const ARRAY_ITEM_SPACING = 45;
 export function isValidJSON(json) {
   try {
     JSON.parse(json);
@@ -101,7 +102,13 @@ function toToml(json) {
   });
 }
 
-export function toGraph(obj, parentId = "root", nodes = [], edges = [], depth = 0) {
+export function toGraph(
+  obj,
+  parentId = "root",
+  nodes = [],
+  edges = [],
+  depth = 0
+) {
   const primitives = [];
   const nestedEntries = [];
 
@@ -123,6 +130,8 @@ export function toGraph(obj, parentId = "root", nodes = [], edges = [], depth = 
       x: depth * 300,
       y: nodes.length * 120,
     },
+    sourcePosition: Position.Right,
+    targetPosition: Position.Left,
   });
 
   // 2️⃣ Handle nested objects & arrays
@@ -146,6 +155,8 @@ export function toGraph(obj, parentId = "root", nodes = [], edges = [], depth = 
           x: (depth + 1) * 300,
           y: nodes.length * 120,
         },
+        sourcePosition: Position.Right,
+        targetPosition: Position.Left,
       });
 
       value.forEach((item, i) => {
@@ -167,6 +178,8 @@ export function toGraph(obj, parentId = "root", nodes = [], edges = [], depth = 
               x: (depth + 2) * 300,
               y: nodes.length * 120,
             },
+            sourcePosition: Position.Right,
+            targetPosition: Position.Left,
           });
         }
       });
@@ -182,6 +195,8 @@ export function toGraph(obj, parentId = "root", nodes = [], edges = [], depth = 
           x: (depth + 1) * 300,
           y: nodes.length * 120,
         },
+        sourcePosition: Position.Right,
+        targetPosition: Position.Left,
       });
 
       const dataNodeId = `${containerId}-data`;
@@ -200,6 +215,3 @@ export function toGraph(obj, parentId = "root", nodes = [], edges = [], depth = 
 
   return { nodes, edges };
 }
-
-
-

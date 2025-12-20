@@ -14,6 +14,9 @@ export default function TreeView({ jsonStr }) {
       <ReactFlow
         nodes={nodes}
         edges={edges}
+        defaultEdgeOptions={{
+          style: { stroke: "#54a0ff", strokeWidth: 2 },
+        }}
         fitView
       />
     </div>

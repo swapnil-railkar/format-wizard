@@ -102,10 +102,13 @@ body {
 }
 
 .tree-view {
-  width: 100%;
+  display: flex;
+  justify-self:center;
+  width: 90%;
   height: 80vh; 
   background-color: #545454b0;
   border-radius: 10px;
+  margin-top: 16px;
 }
 
 .tree-view .react-flow__node-default {
@@ -126,11 +129,6 @@ body {
 .tree-view .react-flow__node.selected
 .react-flow__node-default__body {
   box-shadow: 0 0 0 2px #facc15;
-}
-
-.tree-view .react-flow__edge-path {
-  stroke: #54a0ff;
-  stroke-width: 2;
 }
 
 .tree-view .react-flow__handle {
