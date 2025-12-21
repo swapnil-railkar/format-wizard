@@ -1,4 +1,5 @@
 export const BEAUTIFY = 'beautify';
+export const MINIFY = 'minify';
 export const YAML = 'yaml';
 export const XML = 'xml';
 export const JSON5 = 'json5';

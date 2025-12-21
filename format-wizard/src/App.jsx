@@ -8,29 +8,41 @@ import {
   DFEFAULT_INPUT,
   DEFAULT_OUTPUT,
   TREE_VIEW,
+  JSON_VIEW,
 } from "./data/operation-constants";
 import TreeView from "./components/TreeView";
 
 function App() {
   const [input, updateInput] = useState(DFEFAULT_INPUT);
-  const [output, updateOutput] = useState();
-  const [operation, updateOperation] = useState(DEFAULT_OUTPUT);
+  const [output, updateOutput] = useState(DEFAULT_OUTPUT);
+  const [showTree, updateShowTree] = useState(false);
+  const [operation, updateSelectedOperation] = useState();
 
   useEffect(() => {
     console.log(operation);
     function handleUpdateOutput(msg) {
       updateOutput(msg);
     }
+
     const result = isValidJSON(input.trim());
     console.log(result);
     if (result.message) {
       handleUpdateOutput(result.message);
       return;
     }
+
+    function handleUpdateShowTree(opValue) {
+      if(opValue === JSON_VIEW || result.message) {
+        updateShowTree(false);
+      }
+      if(opValue === TREE_VIEW) {
+        updateShowTree(true);
+        return;
+      }
+    }
     // input json is valid.
-    console.log(operation);
-    if(operation === TREE_VIEW) {
-      return;
+    if(operation === TREE_VIEW || operation === TREE_VIEW) {
+      handleUpdateShowTree(operation);
     }
     const outputMsg = convertJSON(operation, input);
     console.log("Output : ", outputMsg);
@@ -40,16 +52,16 @@ function App() {
   return (
     <>
       <Toolbar
-        operation={operation}
-        selectOperation={updateOperation}
+        isValidJSON={isValidJSON(input.trim())}
+        selectOperation={updateSelectedOperation}
       />
-      {operation != TREE_VIEW && (
+      {!showTree && (
         <main className="editor-wrapper">
           <Editor defaultValue={input} handleUpdateInput={updateInput} />
           <Result value={output} format={operation} />
         </main>
       )}
-      {operation === TREE_VIEW && <TreeView jsonStr={input}/>}
+      {showTree && <TreeView jsonStr={input}/>}
     </>
   );
 }

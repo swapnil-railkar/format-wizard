@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   BEAUTIFY,
   HJSON,
@@ -7,85 +8,75 @@ import {
   TREE_VIEW,
   XML,
   YAML,
+  MINIFY
 } from "../data/operation-constants";
 
-export default function Toolbar({ operation, selectOperation }) {
+const NONE = 'none';
+export default function Toolbar({ selectOperation }) {
+  const[utilityOp, updateUtilityOp] = useState('');
+  const[formatOp, updateFormatOp] = useState('');
+
+  function handleUtilityChange(event) {
+    const utilityVal = event.target.value;
+    updateUtilityOp(utilityVal);
+    updateFormatOp(NONE);
+    selectOperation(utilityVal);
+  }
+
+  function handleFormatChange(event) {
+    const formatVal = event.target.value;
+    updateFormatOp(formatVal);
+    updateUtilityOp(NONE);
+    selectOperation(formatVal);
+  }
+
   return (
-    <div className="toolbar">
-      <div className="format-group">
-        <input
-          type="radio"
-          id="json-view"
-          name="format"
-          checked={operation === JSON_VIEW}
-          onChange={() => selectOperation(JSON_VIEW)}
-        />
-        <label htmlFor="json-view">JSON View</label>
-
-        <input
-          type="radio"
-          id="tree-view"
-          name="format"
-          checked={operation === TREE_VIEW}
-          onChange={() => selectOperation(TREE_VIEW)}
-        />
-        <label htmlFor="tree-view">Tree View</label>
-
-        <input
-          type="radio"
-          id="beautify"
-          name="format"
-          checked={operation === BEAUTIFY}
-          onChange={() => selectOperation(BEAUTIFY)}
-        />
-        <label htmlFor="beautify">Beautify</label>
+    <section className="toolbar">
+      <div className="wrapper">
+        <img src="/app-logo-fox.png" height="20" width="20" />
       </div>
-      <div className="format-group">
-        <input
-          type="radio"
-          id="yaml"
-          name="format"
-          checked={operation === YAML}
-          onChange={() => selectOperation(YAML)}
-        />
-        <label htmlFor="yaml">YAML</label>
-
-        <input
-          type="radio"
-          id="xml"
-          name="format"
-          checked={operation === XML}
-          onChange={() => selectOperation(XML)}
-        />
-        <label htmlFor="xml">XML</label>
-
-        <input
-          type="radio"
-          id="json5"
-          name="format"
-          checked={operation === JSON5}
-          onChange={() => selectOperation(JSON5)}
-        />
-        <label htmlFor="json5">JSON5</label>
-
-        <input
-          type="radio"
-          id="hjson"
-          name="format"
-          checked={operation === HJSON}
-          onChange={() => selectOperation(HJSON)}
-        />
-        <label htmlFor="hjson">HJSON</label>
-
-        <input
-          type="radio"
-          id="toml"
-          name="format"
-          checked={operation === TOML}
-          onChange={() => selectOperation(TOML)}
-        />
-        <label htmlFor="toml">TOML</label>
+      <div className="wrapper">
+        <select
+          className="dropdown text"
+          value={utilityOp}
+          onChange={handleUtilityChange}
+        >
+          <option value={NONE} className="options text">
+            Utility
+          </option>
+          <option value={BEAUTIFY} className="options text">
+            Beautify
+          </option>
+          <option value={MINIFY} className="options text">
+            Minify
+          </option>
+        </select>
+        <select
+          className="dropdown text"
+          value={formatOp}
+          onChange={handleFormatChange}
+        >
+          <option value={NONE} className="options text">
+            Format
+          </option>
+          <option value={YAML} className="options text">
+            YAML
+          </option>
+          <option value={XML} className="options text">
+            XML
+          </option>
+          <option value={JSON5} className="options text">
+            JSON5
+          </option>
+          <option value={HJSON} className="options text">
+            HJSON
+          </option>
+          <option value={TOML} className="options text">
+            TOML
+          </option>
+        </select>
+        <p className="title-text">FormatWizard</p>
       </div>
-    </div>
+    </section>
   );
 }
