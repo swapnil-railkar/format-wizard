@@ -17,42 +17,43 @@ function App() {
   const [output, updateOutput] = useState(DEFAULT_OUTPUT);
   const [showTree, updateShowTree] = useState(false);
   const [operation, updateSelectedOperation] = useState();
+  const [validJSON, updateValidJSON] = useState(false);
 
   useEffect(() => {
-    console.log(operation);
-    function handleUpdateOutput(msg) {
-      updateOutput(msg);
-    }
-
     const result = isValidJSON(input.trim());
-    console.log(result);
-    if (result.message) {
-      handleUpdateOutput(result.message);
-      return;
+
+    function handleError(errorMsg) {
+      updateValidJSON(false);
+      updateOutput(errorMsg);
+      updateShowTree(false);
     }
 
-    function handleUpdateShowTree(opValue) {
-      if(opValue === JSON_VIEW || result.message) {
-        updateShowTree(false);
-      }
-      if(opValue === TREE_VIEW) {
+    function handleOutput() {
+      updateValidJSON(true);
+      if (operation === TREE_VIEW) {
         updateShowTree(true);
         return;
       }
+
+      updateShowTree(false);
+
+      const outputMsg = convertJSON(operation, input);
+      updateOutput(outputMsg);
     }
-    // input json is valid.
-    if(operation === TREE_VIEW || operation === TREE_VIEW) {
-      handleUpdateShowTree(operation);
+
+    if (result.message) {
+      handleError(result.message);
+      return;
     }
-    const outputMsg = convertJSON(operation, input);
-    console.log("Output : ", outputMsg);
-    handleUpdateOutput(outputMsg);
+
+    // input is valid JSON
+    handleOutput();
   }, [input, operation]);
 
   return (
     <>
       <Toolbar
-        isValidJSON={isValidJSON(input.trim())}
+        isValidJSON={validJSON}
         selectOperation={updateSelectedOperation}
       />
       {!showTree && (
@@ -61,7 +62,7 @@ function App() {
           <Result value={output} format={operation} />
         </main>
       )}
-      {showTree && <TreeView jsonStr={input}/>}
+      {showTree && <TreeView jsonStr={input} />}
     </>
   );
 }

@@ -12,10 +12,10 @@ import {
 } from "../data/operation-constants";
 
 const NONE = "none";
-export default function Toolbar({ selectOperation }) {
+export default function Toolbar({ isValidJSON, selectOperation }) {
   const [utilityOp, updateUtilityOp] = useState("");
   const [formatOp, updateFormatOp] = useState("");
-  const [view, setView] = useState("json");
+  const [view, setView] = useState(JSON_VIEW);
 
   function handleUtilityChange(event) {
     const utilityVal = event.target.value;
@@ -31,6 +31,13 @@ export default function Toolbar({ selectOperation }) {
     selectOperation(formatVal);
   }
 
+  function handleUpdateView(view) {
+    setView(view);
+    updateUtilityOp(NONE);
+    updateFormatOp(NONE);
+    selectOperation(view);
+  }
+
   return (
     <section className="toolbar">
       <div className="wrapper">
@@ -38,11 +45,11 @@ export default function Toolbar({ selectOperation }) {
         <div className="view-toggle">
           <input
             type="radio"
-            id="jsonView"
+            id = "jsonView"
             name="view"
-            value="json"
-            checked={view === "json"}
-            onChange={() => setView("json")}
+            value={JSON_VIEW}
+            checked={view === JSON_VIEW}
+            onChange={() => handleUpdateView(JSON_VIEW)}
           />
           <label htmlFor="jsonView" className="text">JSON View</label>
 
@@ -50,9 +57,10 @@ export default function Toolbar({ selectOperation }) {
             type="radio"
             id="treeView"
             name="view"
-            value="tree"
-            checked={view === "tree"}
-            onChange={() => setView("tree")}
+            value={TREE_VIEW}
+            checked={view === TREE_VIEW}
+            onChange={() => handleUpdateView(TREE_VIEW)}
+            disabled = {!isValidJSON}
           />
           <label htmlFor="treeView" className="text">Tree View</label>
         </div>
@@ -62,6 +70,7 @@ export default function Toolbar({ selectOperation }) {
           className="dropdown text"
           value={utilityOp}
           onChange={handleUtilityChange}
+          disabled = {!isValidJSON}
         >
           <option value={NONE} className="options text">
             Utility
@@ -77,6 +86,7 @@ export default function Toolbar({ selectOperation }) {
           className="dropdown text"
           value={formatOp}
           onChange={handleFormatChange}
+          disabled = {!isValidJSON}
         >
           <option value={NONE} className="options text">
             Format
