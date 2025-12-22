@@ -190,3 +190,27 @@ body {
   flex-direction: column;
   gap: 2px;
 }
+
+.view-toggle {
+  display: inline-flex;
+  border: none;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.view-toggle input {
+  display: none;
+}
+
+.view-toggle label {
+  cursor: pointer;
+  background: rgba(255,255,255,0.06);
+  color: #ddd;
+  transition: background 0.2s ease;
+}
+
+.view-toggle input:checked + label {
+  background: rgba(84,160,255,0.35);
+  color: #fff;
+}
+
