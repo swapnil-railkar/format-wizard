@@ -10,6 +10,7 @@ import {
   HJSON,
   TOML as TOMLOP,
   DEFAULT_OUTPUT,
+  MINIFY
 } from "./operation-constants";
 import json2toml from "json2toml";
 import { Position } from "@xyflow/react";
@@ -33,7 +34,9 @@ export function convertJSON(target, input) {
   console.log("inside engine : ", target);
   switch (target) {
     case BEAUTIFY:
-      return formatJSON(input);
+      return formatJSON(json);
+    case MINIFY:
+      return minifyJSON(json);
     case YAML:
       return toYAML(json);
     case XML:
@@ -50,9 +53,12 @@ export function convertJSON(target, input) {
 }
 
 function formatJSON(json) {
-  return JSON.stringify(JSON.parse(json), null, 2);
+  return JSON.stringify(json, null, 2);
 }
 
+function minifyJSON(json) {
+  return JSON.stringify(json);
+}
 function toYAML(json) {
   return yaml.dump(json, {
     indent: 2,
