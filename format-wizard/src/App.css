@@ -1,6 +1,6 @@
 html,
 body {
-  background: #090979;
+  background: #202020;
   background-repeat: no-repeat;
   background-attachment: fixed; /* keeps it steady even if page scrolls */
   background-size: cover;
@@ -83,7 +83,7 @@ body {
   gap: 16px;
   width: 100%;
   margin-bottom: 10px;
-  background-color: #000b3d;
+  background-color: #03c4ff;
 }
 
 .toolbar * {
@@ -214,3 +214,10 @@ body {
   color: #fff;
 }
 
+.logo-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+  width:fit-content;
+}

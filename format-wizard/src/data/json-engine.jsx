@@ -14,6 +14,7 @@ import {
 } from "./operation-constants";
 import json2toml from "json2toml";
 import { Position } from "@xyflow/react";
+import { JSONPath } from "jsonpath-plus";
 
 export function isValidJSON(json) {
   try {
@@ -104,6 +105,14 @@ function toToml(json) {
     indent: 2,
     newlineAfterSection: true,
   });
+}
+
+export function returnResultForQuery(input, query) {
+  const json = JSON.parse(input);
+  return JSONPath({
+  path: query,
+  json: json
+});
 }
 
 export function toGraph(obj, parentId = "root", nodes = [], edges = []) {

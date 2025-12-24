@@ -39,19 +39,23 @@ export default function Toolbar({ isValidJSON, selectOperation }) {
   }
 
   return (
-    <section className="toolbar">
-      <div className="wrapper">
-        <img src="/app-logo-fox.png" height="20" width="20" />
+    <header className="toolbar">
+      <section className="wrapper">
+        <div className="logo-wrapper">
+          <img src="/app-logo-fox.png" height="20" width="20" />
+        </div>
         <div className="view-toggle">
           <input
             type="radio"
-            id = "jsonView"
+            id="jsonView"
             name="view"
             value={JSON_VIEW}
             checked={view === JSON_VIEW}
             onChange={() => handleUpdateView(JSON_VIEW)}
           />
-          <label htmlFor="jsonView" className="text">JSON View</label>
+          <label htmlFor="jsonView" className="text">
+            JSON View
+          </label>
 
           <input
             type="radio"
@@ -60,17 +64,19 @@ export default function Toolbar({ isValidJSON, selectOperation }) {
             value={TREE_VIEW}
             checked={view === TREE_VIEW}
             onChange={() => handleUpdateView(TREE_VIEW)}
-            disabled = {!isValidJSON}
+            disabled={!isValidJSON}
           />
-          <label htmlFor="treeView" className="text">Tree View</label>
+          <label htmlFor="treeView" className="text">
+            Tree View
+          </label>
         </div>
-      </div>
-      <div className="wrapper">
+      </section>
+      <section className="wrapper">
         <select
           className="dropdown text"
           value={utilityOp}
           onChange={handleUtilityChange}
-          disabled = {!isValidJSON}
+          disabled={!isValidJSON}
         >
           <option value={NONE} className="options text">
             Utility
@@ -86,7 +92,7 @@ export default function Toolbar({ isValidJSON, selectOperation }) {
           className="dropdown text"
           value={formatOp}
           onChange={handleFormatChange}
-          disabled = {!isValidJSON}
+          disabled={!isValidJSON}
         >
           <option value={NONE} className="options text">
             Format
@@ -108,7 +114,7 @@ export default function Toolbar({ isValidJSON, selectOperation }) {
           </option>
         </select>
         <p className="title-text">FormatWizard</p>
-      </div>
-    </section>
+      </section>
+    </header>
   );
 }
