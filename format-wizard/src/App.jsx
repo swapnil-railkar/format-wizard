@@ -3,12 +3,17 @@ import "./App.css";
 import Editor from "./components/Editor";
 import Result from "./components/Result";
 import Toolbar from "./components/Toolbar";
-import { convertJSON, isValidJSON } from "./data/json-engine.jsx";
+import {
+  convertJSON,
+  isValidJSON,
+  returnResultForQuery,
+} from "./data/json-engine.jsx";
 import {
   DFEFAULT_INPUT,
   DEFAULT_OUTPUT,
   TREE_VIEW,
   JSON_VIEW,
+  JSON_QUERY,
 } from "./data/operation-constants";
 import TreeView from "./components/TreeView";
 
@@ -18,6 +23,7 @@ function App() {
   const [showTree, updateShowTree] = useState(false);
   const [operation, updateSelectedOperation] = useState();
   const [validJSON, updateValidJSON] = useState(false);
+  const [query, updateQuery] = useState("");
 
   useEffect(() => {
     const result = isValidJSON(input.trim());
@@ -36,8 +42,17 @@ function App() {
       }
 
       updateShowTree(false);
-
-      const outputMsg = convertJSON(operation, input);
+      let outputMsg = DEFAULT_OUTPUT;
+      if (operation === JSON_QUERY) {
+        try {
+          const result = returnResultForQuery(input, query.trim());
+          outputMsg = JSON.stringify(result, null, 2);
+        } catch (error) {
+          outputMsg = error.message;
+        }
+      } else {
+        outputMsg = convertJSON(operation, input);
+      }
       updateOutput(outputMsg);
     }
 
@@ -47,14 +62,16 @@ function App() {
     }
 
     // input is valid JSON
+    console.log('Selected operation : ', operation);
     handleOutput();
-  }, [input, operation]);
+  }, [input, operation, query]);
 
   return (
     <>
       <Toolbar
         isValidJSON={validJSON}
         selectOperation={updateSelectedOperation}
+        setJsonQuery={updateQuery}
       />
       {!showTree && (
         <main className="editor-wrapper">

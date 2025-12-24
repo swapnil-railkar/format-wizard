@@ -10,3 +10,4 @@ export const TREE_VIEW = 'tree-view';
 export const JSON_VIEW = 'json-view';
 export const DFEFAULT_INPUT = "Paste or type JSON.";
 export const DEFAULT_OUTPUT = "Nothing to show.";
+export const JSON_QUERY = 'json-query';

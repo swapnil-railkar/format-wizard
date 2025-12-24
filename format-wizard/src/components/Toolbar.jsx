@@ -9,18 +9,21 @@ import {
   XML,
   YAML,
   MINIFY,
+  JSON_QUERY,
 } from "../data/operation-constants";
 
 const NONE = "none";
-export default function Toolbar({ isValidJSON, selectOperation }) {
+export default function Toolbar({ isValidJSON, selectOperation, setJsonQuery }) {
   const [utilityOp, updateUtilityOp] = useState("");
   const [formatOp, updateFormatOp] = useState("");
   const [view, setView] = useState(JSON_VIEW);
+  const [query, setQuery] = useState('');
 
   function handleUtilityChange(event) {
     const utilityVal = event.target.value;
     updateUtilityOp(utilityVal);
     updateFormatOp(NONE);
+    setView(JSON_VIEW);
     selectOperation(utilityVal);
   }
 
@@ -28,6 +31,7 @@ export default function Toolbar({ isValidJSON, selectOperation }) {
     const formatVal = event.target.value;
     updateFormatOp(formatVal);
     updateUtilityOp(NONE);
+    setView(JSON_VIEW);
     selectOperation(formatVal);
   }
 
@@ -36,6 +40,12 @@ export default function Toolbar({ isValidJSON, selectOperation }) {
     updateUtilityOp(NONE);
     updateFormatOp(NONE);
     selectOperation(view);
+  }
+
+  function onExecuteQuery() {
+    setView(JSON_VIEW);
+    selectOperation(JSON_QUERY);
+    setJsonQuery(query);
   }
 
   return (
@@ -70,50 +80,73 @@ export default function Toolbar({ isValidJSON, selectOperation }) {
             Tree View
           </label>
         </div>
+        <div className="json-query-bar">
+          <input
+            type="text"
+            className="json-query-input"
+            placeholder="Type or paste a JSON query"
+            onChange={(event) => setQuery(event.target.value)}
+            value={query}
+            disabled={!isValidJSON}
+          />
+          <button
+            className="json-query-btn"
+            onClick={() => onExecuteQuery()}
+            disabled={!isValidJSON}
+          >
+            Search
+          </button>
+        </div>
       </section>
       <section className="wrapper">
-        <select
-          className="dropdown text"
-          value={utilityOp}
-          onChange={handleUtilityChange}
-          disabled={!isValidJSON}
-        >
-          <option value={NONE} className="options text">
-            Utility
-          </option>
-          <option value={BEAUTIFY} className="options text">
-            Beautify
-          </option>
-          <option value={MINIFY} className="options text">
-            Minify
-          </option>
-        </select>
-        <select
-          className="dropdown text"
-          value={formatOp}
-          onChange={handleFormatChange}
-          disabled={!isValidJSON}
-        >
-          <option value={NONE} className="options text">
-            Format
-          </option>
-          <option value={YAML} className="options text">
-            YAML
-          </option>
-          <option value={XML} className="options text">
-            XML
-          </option>
-          <option value={JSON5} className="options text">
-            JSON5
-          </option>
-          <option value={HJSON} className="options text">
-            HJSON
-          </option>
-          <option value={TOML} className="options text">
-            TOML
-          </option>
-        </select>
-        <p className="title-text">FormatWizard</p>
+        <div className="logo-wrapper">
+          <select
+            className="dropdown text"
+            value={utilityOp}
+            onChange={handleUtilityChange}
+            disabled={!isValidJSON}
+          >
+            <option value={NONE} className="options text">
+              Utility
+            </option>
+            <option value={BEAUTIFY} className="options text">
+              Beautify
+            </option>
+            <option value={MINIFY} className="options text">
+              Minify
+            </option>
+          </select>
+        </div>
+        <div className="logo-wrapper">
+          <select
+            className="dropdown text"
+            value={formatOp}
+            onChange={handleFormatChange}
+            disabled={!isValidJSON}
+          >
+            <option value={NONE} className="options text">
+              Format
+            </option>
+            <option value={YAML} className="options text">
+              YAML
+            </option>
+            <option value={XML} className="options text">
+              XML
+            </option>
+            <option value={JSON5} className="options text">
+              JSON5
+            </option>
+            <option value={HJSON} className="options text">
+              HJSON
+            </option>
+            <option value={TOML} className="options text">
+              TOML
+            </option>
+          </select>
+        </div>
+        <div className="logo-wrapper">
+          <p className="title-text">FormatWizard</p>
+        </div>
       </section>
     </header>
   );

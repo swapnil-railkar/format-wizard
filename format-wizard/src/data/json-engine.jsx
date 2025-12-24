@@ -10,7 +10,7 @@ import {
   HJSON,
   TOML as TOMLOP,
   DEFAULT_OUTPUT,
-  MINIFY
+  MINIFY,
 } from "./operation-constants";
 import json2toml from "json2toml";
 import { Position } from "@xyflow/react";
@@ -109,10 +109,10 @@ function toToml(json) {
 
 export function returnResultForQuery(input, query) {
   const json = JSON.parse(input);
-  return JSONPath({
-  path: query,
-  json: json
-});
+    return JSONPath({
+      path: query,
+      json: json,
+    });
 }
 
 export function toGraph(obj, parentId = "root", nodes = [], edges = []) {
@@ -139,9 +139,11 @@ export function toGraph(obj, parentId = "root", nodes = [], edges = []) {
       id: parentId,
       data: {
         label:
-          parentId === "root"
-            ? <span className="json-root">root</span>
-            : <span className="json-key">{parentId.split("-").pop()}</span>,
+          parentId === "root" ? (
+            <span className="json-root">root</span>
+          ) : (
+            <span className="json-key">{parentId.split("-").pop()}</span>
+          ),
       },
       sourcePosition: Position.Right,
       targetPosition: Position.Left,
@@ -225,4 +227,3 @@ export function toGraph(obj, parentId = "root", nodes = [], edges = []) {
 
   return { nodes, edges };
 }
-
