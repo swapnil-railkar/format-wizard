@@ -3,7 +3,11 @@ import CodeMirror from "@uiw/react-codemirror";
 import { json } from "@codemirror/lang-json";
 import { foldGutter } from "@codemirror/language";
 import { oneDark } from "@codemirror/theme-one-dark";
-import { convertJSON, isValidJSON } from "../data/json-engine";
+import {
+  convertJSON,
+  getJSONDifference,
+  isValidJSON,
+} from "../data/json-engine";
 import { BEAUTIFY } from "../data/operation-constants";
 
 const BASE_JSON = `{
@@ -27,7 +31,6 @@ export default function Compare() {
     }
     const formattedJSON = convertJSON(BEAUTIFY, value);
     updateBaseJson(formattedJSON);
-    getResult();
   }
 
   function handleNewJSONUpdate(value) {
@@ -39,39 +42,55 @@ export default function Compare() {
     }
     const formattedJSON = convertJSON(BEAUTIFY, value);
     updateJSON(formattedJSON);
-    getResult();
   }
 
   function getResult() {
-    updateResult("Result will be displayed here");
+    const validBase = isValidJSON(baseJSON);
+    if (validBase.message) {
+      return;
+    }
+    const validUpdate = isValidJSON(newJSON);
+    if (validUpdate.message) {
+      return;
+    }
+    const diffResult = getJSONDifference(baseJSON, newJSON);
+    console.log("Diff result : ", diffResult);
+    updateResult(diffResult);
   }
 
   return (
-    <main className="compare-wrapper">
-      <CodeMirror
-        value={baseJSON}
-        height="80vh"
-        width="100%"
-        theme={oneDark}
-        extensions={[json(), foldGutter()]}
-        onChange={(val) => handleBaseJSONUpdate(val)}
-      />
-      <CodeMirror
-        value={newJSON}
-        height="80vh"
-        width="100%"
-        theme={oneDark}
-        extensions={[json(), foldGutter()]}
-        onChange={(val) => handleNewJSONUpdate(val)}
-      />
-      <CodeMirror
-        value={result}
-        height="80vh"
-        width="100%"
-        theme={oneDark}
-        extensions={[json(), foldGutter()]}
-        editable={false}
-      />
-    </main>
+    <>
+      <div className="center-horizontally">
+        <button className="app-default-btn text" onClick={() => getResult()}>
+          Compare
+        </button>
+      </div>
+      <main className="compare-wrapper">
+        <CodeMirror
+          value={baseJSON}
+          height="80vh"
+          width="100%"
+          theme={oneDark}
+          extensions={[json(), foldGutter()]}
+          onChange={(val) => handleBaseJSONUpdate(val)}
+        />
+        <CodeMirror
+          value={newJSON}
+          height="80vh"
+          width="100%"
+          theme={oneDark}
+          extensions={[json(), foldGutter()]}
+          onChange={(val) => handleNewJSONUpdate(val)}
+        />
+        <CodeMirror
+          value={result}
+          height="80vh"
+          width="100%"
+          theme={oneDark}
+          extensions={[json(), foldGutter()]}
+          editable={false}
+        />
+      </main>
+    </>
   );
 }

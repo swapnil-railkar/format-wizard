@@ -15,6 +15,7 @@ import {
 import json2toml from "json2toml";
 import { Position } from "@xyflow/react";
 import { JSONPath } from "jsonpath-plus";
+import { diff } from "jsondiffpatch";
 
 export function isValidJSON(json) {
   try {
@@ -113,6 +114,64 @@ export function returnResultForQuery(input, query) {
       path: query,
       json: json,
     });
+}
+
+export function getJSONDifference(baseJSONStr, updatedJSONStr) {
+  const baseJSON = JSON.parse(baseJSONStr);
+  const updatedJSON = JSON.parse(updatedJSONStr);
+  const delta = diff(baseJSON, updatedJSON);
+  const difference = extractDiffs(delta);
+  return formatJSON(difference);
+}
+
+function extractDiffs(delta, basePath = "$") {
+  let diffs = [];
+
+  for (const key in delta) {
+    if (key === "_t") continue;
+
+    const value = delta[key];
+    const isIndex = /^\d+$/.test(key);
+
+    const path = isIndex
+      ? `${basePath}[${key}]`
+      : `${basePath}.${key}`;
+
+    // MODIFIED (existed in A, changed in B)
+    if (Array.isArray(value) && value.length === 2) {
+      diffs.push({
+        path,
+        type: "modified",
+        from: value[0],
+        to: value[1]
+      });
+    }
+
+    // ADDED (did not exist in A, added in B)
+    else if (Array.isArray(value) && value.length === 1) {
+      diffs.push({
+        path,
+        type: "added",
+        to: value[0]
+      });
+    }
+
+    // REMOVED (existed in A, removed in B)
+    else if (Array.isArray(value) && value[1] === 0 && value[2] === 0) {
+      diffs.push({
+        path,
+        type: "removed",
+        from: value[0]
+      });
+    }
+
+    // NESTED
+    else if (typeof value === "object") {
+      diffs = diffs.concat(extractDiffs(value, path));
+    }
+  }
+
+  return diffs;
 }
 
 export function toGraph(obj, parentId = "root", nodes = [], edges = []) {
