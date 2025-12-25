@@ -210,7 +210,7 @@ body {
 }
 
 .view-toggle input:checked + label {
-  background: rgba(84,160,255,0.35);
+  background: rgba(3, 61, 132, 0.35);
   color: #fff;
 }
 
@@ -226,7 +226,7 @@ body {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 8px 10px;
+  padding: 2px 5px;
   border-radius: 6px;
   background: #1e1e1e;
   border: 1px solid #333;

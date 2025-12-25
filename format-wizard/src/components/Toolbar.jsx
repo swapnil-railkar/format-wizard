@@ -10,14 +10,19 @@ import {
   YAML,
   MINIFY,
   JSON_QUERY,
+  COMPARE,
 } from "../data/operation-constants";
 
 const NONE = "none";
-export default function Toolbar({ isValidJSON, selectOperation, setJsonQuery }) {
+export default function Toolbar({
+  isValidJSON,
+  selectOperation,
+  setJsonQuery,
+}) {
   const [utilityOp, updateUtilityOp] = useState("");
   const [formatOp, updateFormatOp] = useState("");
   const [view, setView] = useState(JSON_VIEW);
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState("");
 
   function handleUtilityChange(event) {
     const utilityVal = event.target.value;
@@ -79,71 +84,89 @@ export default function Toolbar({ isValidJSON, selectOperation, setJsonQuery }) 
           <label htmlFor="treeView" className="text">
             Tree View
           </label>
-        </div>
-        <div className="json-query-bar">
+
           <input
-            type="text"
-            className="json-query-input"
-            placeholder="Type or paste a JSON query"
-            onChange={(event) => setQuery(event.target.value)}
-            value={query}
-            disabled={!isValidJSON}
+            type="radio"
+            id="compareView"
+            name="view"
+            value={COMPARE}
+            checked={view === COMPARE}
+            onChange={() => handleUpdateView(COMPARE)}
           />
-          <button
-            className="json-query-btn"
-            onClick={() => onExecuteQuery()}
-            disabled={!isValidJSON}
-          >
-            Search
-          </button>
+          <label htmlFor="compareView" className="text">
+            Compare JSON
+          </label>
         </div>
+        {view === JSON_VIEW && (
+          <div className="json-query-bar">
+            <input
+              type="text"
+              className="json-query-input"
+              placeholder="Type or paste a JSON query"
+              onChange={(event) => setQuery(event.target.value)}
+              value={query}
+              disabled={!isValidJSON}
+            />
+            <button
+              className="json-query-btn"
+              onClick={() => onExecuteQuery()}
+              disabled={!isValidJSON}
+            >
+              Search
+            </button>
+          </div>
+        )}
       </section>
       <section className="wrapper">
-        <div className="logo-wrapper">
-          <select
-            className="dropdown text"
-            value={utilityOp}
-            onChange={handleUtilityChange}
-            disabled={!isValidJSON}
-          >
-            <option value={NONE} className="options text">
-              Utility
-            </option>
-            <option value={BEAUTIFY} className="options text">
-              Beautify
-            </option>
-            <option value={MINIFY} className="options text">
-              Minify
-            </option>
-          </select>
-        </div>
-        <div className="logo-wrapper">
-          <select
-            className="dropdown text"
-            value={formatOp}
-            onChange={handleFormatChange}
-            disabled={!isValidJSON}
-          >
-            <option value={NONE} className="options text">
-              Format
-            </option>
-            <option value={YAML} className="options text">
-              YAML
-            </option>
-            <option value={XML} className="options text">
-              XML
-            </option>
-            <option value={JSON5} className="options text">
-              JSON5
-            </option>
-            <option value={HJSON} className="options text">
-              HJSON
-            </option>
-            <option value={TOML} className="options text">
-              TOML
-            </option>
-          </select>
-        </div>
+        {view === JSON_VIEW && (
+          <div className="logo-wrapper">
+            <select
+              className="dropdown text"
+              value={utilityOp}
+              onChange={handleUtilityChange}
+              disabled={!isValidJSON}
+            >
+              <option value={NONE} className="options text">
+                Utility
+              </option>
+              <option value={BEAUTIFY} className="options text">
+                Beautify
+              </option>
+              <option value={MINIFY} className="options text">
+                Minify
+              </option>
+            </select>
+          </div>
+        )}
+        {view === JSON_VIEW && (
+          <div className="logo-wrapper">
+            <select
+              className="dropdown text"
+              value={formatOp}
+              onChange={handleFormatChange}
+              disabled={!isValidJSON}
+            >
+              <option value={NONE} className="options text">
+                Format
+              </option>
+              <option value={YAML} className="options text">
+                YAML
+              </option>
+              <option value={XML} className="options text">
+                XML
+              </option>
+              <option value={JSON5} className="options text">
+                JSON5
+              </option>
+              <option value={HJSON} className="options text">
+                HJSON
+              </option>
+              <option value={TOML} className="options text">
+                TOML
+              </option>
+            </select>
+          </div>
+        )}
         <div className="logo-wrapper">
           <p className="title-text">FormatWizard</p>
         </div>
