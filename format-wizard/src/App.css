@@ -7,6 +7,10 @@ body {
   margin: 0px;
 }
 
+.toolbar a {
+  padding: 0px;
+}
+
 .title-text {
   font-family: "Oleo Script", system-ui;
   font-weight: 400;

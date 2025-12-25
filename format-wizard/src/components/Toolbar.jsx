@@ -57,7 +57,20 @@ export default function Toolbar({
     <header className="toolbar">
       <section className="wrapper">
         <div className="center-vertically">
-          <img src="/app-logo-fox.png" height="20" width="20" />
+          <a
+            href="https://github.com/swapnil-railkar/format-wizard"
+            target="_blank"
+            rel="noopener noreferrer"
+            title="View FormatWizard on GitHub"
+          >
+            <img
+              src="/app-logo-fox.png"
+              height="20"
+              width="20"
+              alt="FormatWizard GitHub"
+              style={{ cursor: "pointer" }}
+            />
+          </a>
         </div>
         <div className="view-toggle">
           <input
