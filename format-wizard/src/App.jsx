@@ -3,6 +3,7 @@ import "./App.css";
 import Editor from "./components/Editor";
 import Result from "./components/Result";
 import Toolbar from "./components/Toolbar";
+import Compare from "./components/Compare.jsx";
 import {
   convertJSON,
   isValidJSON,
@@ -14,6 +15,7 @@ import {
   TREE_VIEW,
   JSON_VIEW,
   JSON_QUERY,
+  COMPARE,
 } from "./data/operation-constants";
 import TreeView from "./components/TreeView";
 
@@ -24,10 +26,9 @@ function App() {
   const [operation, updateSelectedOperation] = useState();
   const [validJSON, updateValidJSON] = useState(false);
   const [query, updateQuery] = useState("");
+  const [compareView, showCompareView] = useState(false);
 
   useEffect(() => {
-    const result = isValidJSON(input.trim());
-
     function handleError(errorMsg) {
       updateValidJSON(false);
       updateOutput(errorMsg);
@@ -56,13 +57,24 @@ function App() {
       updateOutput(outputMsg);
     }
 
+    function handleCompareJSONView() {
+      if(operation === COMPARE) {
+        showCompareView(true);
+        return;
+      }
+      showCompareView(false);
+    }
+
+    // before validation, check if comparison window is opened.
+    handleCompareJSONView();
+
+    const result = isValidJSON(input.trim());
     if (result.message) {
       handleError(result.message);
       return;
     }
 
     // input is valid JSON
-    console.log('Selected operation : ', operation);
     handleOutput();
   }, [input, operation, query]);
 
@@ -73,13 +85,14 @@ function App() {
         selectOperation={updateSelectedOperation}
         setJsonQuery={updateQuery}
       />
-      {!showTree && (
+      {!showTree && !compareView && (
         <main className="editor-wrapper">
           <Editor defaultValue={input} handleUpdateInput={updateInput} />
           <Result value={output} format={operation} />
         </main>
       )}
       {showTree && <TreeView jsonStr={input} />}
+      {compareView && <Compare />}
     </>
   );
 }

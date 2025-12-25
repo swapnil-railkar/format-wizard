@@ -56,7 +56,7 @@ export default function Toolbar({
   return (
     <header className="toolbar">
       <section className="wrapper">
-        <div className="logo-wrapper">
+        <div className="center-vertically">
           <img src="/app-logo-fox.png" height="20" width="20" />
         </div>
         <div className="view-toggle">
@@ -108,7 +108,7 @@ export default function Toolbar({
               disabled={!isValidJSON}
             />
             <button
-              className="json-query-btn"
+              className="text app-default-btn"
               onClick={() => onExecuteQuery()}
               disabled={!isValidJSON}
             >
@@ -119,7 +119,7 @@ export default function Toolbar({
       </section>
       <section className="wrapper">
         {view === JSON_VIEW && (
-          <div className="logo-wrapper">
+          <div className="center-vertically">
             <select
               className="dropdown text"
               value={utilityOp}
@@ -139,7 +139,7 @@ export default function Toolbar({
           </div>
         )}
         {view === JSON_VIEW && (
-          <div className="logo-wrapper">
+          <div className="center-vertically">
             <select
               className="dropdown text"
               value={formatOp}
@@ -167,7 +167,7 @@ export default function Toolbar({
             </select>
           </div>
         )}
-        <div className="logo-wrapper">
+        <div className="center-vertically">
           <p className="title-text">FormatWizard</p>
         </div>
       </section>

@@ -23,6 +23,7 @@
     "js-yaml": "^4.1.1",
     "json2toml": "^6.1.1",
     "json5": "^2.2.3",
+    "jsondiffpatch": "^0.7.3",
     "jsonpath-plus": "^10.3.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
