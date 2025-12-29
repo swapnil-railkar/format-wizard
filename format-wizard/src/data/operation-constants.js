@@ -13,7 +13,7 @@ export const DFEFAULT_INPUT = `{
   "app": "FormatWizard",
   "features": {
     "format": ["beautify", "minify", "validate"],
-    "convert": ["YAML", "XML", "JSON5", "HJSON", "CSV"],
+    "convert": ["YAML", "XML", "JSON5", "HJSON", "TOML"],
     "view": ["JSON", "Tree", "Compare"]
   }
 }
